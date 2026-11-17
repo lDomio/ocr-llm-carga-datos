@@ -6,8 +6,9 @@
 ![Gemini](https://img.shields.io/badge/Gemini-8E75B2?style=flat-square&logo=googlegemini&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white)
 
-> Hackathon project — **Anti Loop Day**, Universidad Nacional de General Sarmiento, 2025.
-> The repository is private because it contains API credentials. This case study documents the solution.
+[English](README.md) | [Español](README.es.md)
+
+> Hackathon project for **Anti Loop Day**, Universidad Nacional de General Sarmiento, 2025.
 
 ## The problem
 
@@ -38,11 +39,31 @@ flowchart LR
     API --> N8N[n8n workflow]
 ```
 
-## Stack
+## Repository layout
 
-`Python` · `FastAPI` · `LangChain` · `Gemini` · `Tesseract` · `pdf2image` · `Pydantic` · `Docker` · `n8n`
+```text
+├── python_agent.py          # FastAPI app + OCR/LLM extraction
+├── index.html               # demo UI
+├── Dockerfile
+├── docker-compose.yml
+├── requirements.txt
+├── My workflow-n8n.json     # automation workflow
+└── LICENSE
+```
 
-## What I built
+## Extracted data
+
+| Field | Example |
+|---|---|
+| Document type | Factura A |
+| Total amount | 125000.00 |
+| Date | 2025-11-20 |
+| Business name | Acme S.A. |
+| CUIT | 30-12345678-9 |
+| Invoice number | 0001-00001234 |
+| CAE | 75123456789012 |
+
+## My role
 
 - FastAPI endpoint for file upload and extraction.
 - OCR pipeline for PDFs and images.
@@ -50,8 +71,22 @@ flowchart LR
 - Validation layer with Pydantic.
 - Docker setup and n8n workflow for downstream automation.
 
-## Links
+## Running locally
 
-- [LinkedIn](https://www.linkedin.com/in/luca-domio-dev)
-- [Portfolio](https://github.com/lDomio)
-- Code and demo available on request.
+```bash
+cp .env.example .env
+# edit .env and set GEMINI_API_KEY
+docker compose up --build
+```
+
+The API is exposed on port `8000`. The demo UI is `index.html`.
+
+## Stack
+
+`Python` · `FastAPI` · `LangChain` · `Gemini` · `Tesseract` · `pdf2image` · `Pydantic` · `Docker` · `n8n`
+
+## Notes
+
+- No API keys or real webhook URLs are committed.
+- The n8n workflow points to the local `python_agent` service.
+- Code published for portfolio purposes under the MIT license.

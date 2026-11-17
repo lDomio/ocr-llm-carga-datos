@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OCR Carga de Datos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a3a52 0%, #2d5a7b 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1a3a52 0%, #2d5a7b 100%);
+            color: white;
+            padding: 40px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .header-icon {
+            font-size: 48px;
+            min-width: 60px;
+        }
+
+        .header-content h1 {
+            font-size: 24px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .header-content p {
+            font-size: 14px;
+            opacity: 0.9;
+            line-height: 1.5;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .info-box {
+            background: #f0f4f8;
+            border-left: 4px solid #1a3a52;
+            padding: 16px;
+            margin-bottom: 30px;
+            border-radius: 4px;
+            font-size: 14px;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #1a3a52;
+        }
+
+        .help-text {
+            font-size: 12px;
+            color: #777;
+            margin-top: 6px;
+            line-height: 1.4;
+        }
+
+        button {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #1a3a52 0%, #2d5a7b 100%);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(26, 58, 82, 0.3);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .message {
+            margin-top: 20px;
+            padding: 14px;
+            border-radius: 6px;
+            display: none;
+            text-align: center;
+            font-weight: 500;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .footer {
+            background: #f5f5f5;
+            padding: 20px 40px;
+            font-size: 12px;
+            color: #777;
+            text-align: center;
+            border-top: 1px solid #e0e0e0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-icon">
+                <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" width="60" height="60">
+                    <!-- Círculo de fondo -->
+                    <circle cx="100" cy="100" r="100" fill="#1a7a96"/>
+                    
+                    <!-- Primera línea diagonal -->
+                    <g transform="translate(80, 100)">
+                        <rect x="-8" y="-140" width="16" height="200" 
+                              fill="white" rx="8" 
+                              transform="rotate(25)"/>
+                        
+                        <!-- Segunda línea diagonal -->
+                        <rect x="30" y="-60" width="16" height="150" 
+                              fill="white" rx="8" 
+                              transform="rotate(25)"/>
+                    </g>
+                </svg>
+            </div>
+            <div class="header-content">
+                <h1>OCR Carga de Datos</h1>
+                <p>Automatización para el Anti Loop Day</p>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="info-box">
+                <strong>ℹ️ Información:</strong> Este sistema automatiza la lectura de documentos, analiza los comprobantes y crea los registros correspondientes en un excel en drive.
+            </div>
+
+            <form id="ocrForm">
+                <div class="form-group" style="position: relative;">
+                    <div style="display: flex; gap: 0.5rem; align-items: baseline;">
+                        <label for="expedienteId">ID de Expediente</label>
+                        <span class="tooltip-icon" title="Por el momento, esta funcionalidad no se encuentra habilitada">
+                            <i class="fas fa-info-circle"></i>
+                        </span>
+                    </div>
+                    <div style="position: relative; display: inline-block; width: 100%;">
+                        <input 
+                            type="text" 
+                            id="expedienteId" 
+                            name="expedienteId" 
+                            placeholder="Ingrese el ID del expediente (opcional)"
+                            disabled="true"
+                            title="Por el momento, esta funcionalidad no se encuentra habilitada"
+                        >
+                    </div>
+                    <p class="help-text">
+                        📌 Si no ingresa un ID, se buscará el primer documento en la carpeta.
+                    </p>
+                </div>
+                <button type="submit">
+                    <i class="fas fa-play"></i>
+                    Iniciar proceso
+                </button>
+            </form>
+            <div id="message" class="message"></div>
+        </div>
+
+        <div class="footer">
+            Desarrollado para automatización de procesos - Universidad Nacional de General Sarmiento
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('ocrForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const expedienteId = document.getElementById('expedienteId').value;
+            const messageDiv = document.getElementById('message');
+            const button = e.target.querySelector('button');
+            
+            button.disabled = true;
+            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
+            messageDiv.style.display = 'none';
+            
+            try {
+                const response = await fetch('http://localhost:5678/webhook-test/your-webhook-id', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        expedienteId: expedienteId || null
+                    })
+                });
+                
+                if (response.ok) {
+                    messageDiv.className = 'message success';
+                    messageDiv.innerHTML = '<i class="fas fa-check-circle"></i> Solicitud enviada correctamente';
+                    messageDiv.style.display = 'block';
+                    document.getElementById('expedienteId').value = '';
+                } else {
+                    throw new Error('Error en la respuesta del servidor');
+                }
+            } catch (error) {
+                messageDiv.className = 'message error';
+                messageDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i> Error: ' + error.message;
+                messageDiv.style.display = 'block';
+            } finally {
+                button.disabled = false;
+                button.innerHTML = '<i class="fas fa-play"></i> Iniciar proceso';
+            }
+        });
+    </script>
+</body>
+</html>

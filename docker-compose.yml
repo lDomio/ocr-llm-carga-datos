@@ -1,0 +1,33 @@
+version: '3.7'
+
+services:
+  n8n:
+    image: n8nio/n8n
+    restart: always
+    ports:
+      - "5678:5678"
+    environment:
+      # URL base que usará n8n, importante para que los Webhooks funcionen
+      - N8N_HOST=localhost
+      - N8N_PROTOCOL=http
+      - WEBHOOK_URL=http://localhost:5678/
+      # Define el dueño de la cuenta principal de n8n
+      - N8N_USER_MANAGEMENT_BASE_URL=http://localhost:5678/
+    volumes:
+      # Aquí se guardarán tus workflows y configuraciones
+      - n8n_data:/home/node/.n8n
+
+  python_agent:
+    build:
+      context: .  # Busca el Dockerfile en el directorio actual
+    env_file:
+      - .env
+    restart: always
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHON_ENV=development
+      - LOG_LEVEL=DEBUG
+
+volumes:
+  n8n_data:
